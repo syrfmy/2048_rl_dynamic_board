@@ -101,10 +101,12 @@ class RollingStatistics:
         self._sum = 0.0
 
         self.mean = 0
+        self.median = 0
         self.var = 0
         self.std = 0
         self.min = math.inf
         self.max = -math.inf
+
 
     def update(self, data: torch.Tensor):
         """

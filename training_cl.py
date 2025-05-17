@@ -20,6 +20,10 @@ from training.replay import REPLAY_SPEC, ADV_SPEC
 from tracking.stats import TensorStats
 from agent.gae import compute_gae
 
+
+N_GAME = 4096
+EPOCH = 1500
+
 MASK_4X4 = np.array([[True,  True,  True,  True,  False],
                      [True,  True,  True,  True,  False],
                      [True,  True,  True,  True,  False],
@@ -46,8 +50,8 @@ class ChangingMaskTrainer(BaseTrainer):
     """
     def __init__(self, arguments: dict[str, Any], *, save_dir: Path, logger: logging.Logger | None = None):
         super().__init__(arguments, save_dir=save_dir, logger=logger)
-        self._game_count = 2048
-        self._epoches = 30
+        self._game_count = N_GAME
+        self._epoches = EPOCH
         self._stages_masks=[MASK_3X3, MASK_3X4 ,MASK_4X4]
         self._step_count = 16
         self._use_count = 2
@@ -169,10 +173,10 @@ class ChangingMaskTrainer(BaseTrainer):
             
             # Change mask for the third third of the training
             if epoch == self._epoches // 3:
-                self.print(f"Changing mask at epoch {epoch}")
+                self.print(f"Changing mask to 3x4 at epoch {epoch}")
                 self.change_board(self._stages_masks[1])
             if epoch == self._epoches // 3 * 2:
-                self.print(f"Changing mask at epoch {epoch}")
+                self.print(f"Changing mask to 4x4 at epoch {epoch}")
                 self.change_board(self._stages_masks[2])
                 
             
@@ -191,7 +195,7 @@ if __name__ == "__main__":
 
     now = datetime.now()
     fmt = "%Y%m%d_%H%M%S"
-    save_dir = Path("runs", f"training_cl_{now.strftime(fmt)}")
+    save_dir = Path("runs", f"training_cl_{N_GAME}_{EPOCH}_{now.strftime(fmt)}")
     save_dir.mkdir(parents=True, exist_ok=True)
     logger = logging.getLogger("training_cl")
     logger.setLevel(logging.DEBUG)

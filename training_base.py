@@ -1,3 +1,4 @@
+from calendar import EPOCH
 import numpy as np
 from pathlib import Path
 import logging
@@ -20,6 +21,8 @@ from training.replay import REPLAY_SPEC, ADV_SPEC
 from tracking.stats import TensorStats
 from agent.gae import compute_gae
 
+N_GAME = 4096
+EPOCH = 1500
 MASK_4X4 = np.array([[True,  True,  True,  True,  False],
                      [True,  True,  True,  True,  False],
                      [True,  True,  True,  True,  False],
@@ -32,8 +35,8 @@ class ChangingMaskTrainer(BaseTrainer):
     """
     def __init__(self, arguments: dict[str, Any], *, save_dir: Path, logger: logging.Logger | None = None):
         super().__init__(arguments, save_dir=save_dir, logger=logger)
-        self._game_count = 2048
-        self._epoches = 30
+        self._game_count = N_GAME
+        self._epoches = EPOCH
         self._stages_masks=[MASK_4X4]
         self._step_count = 16
         self._use_count = 2
@@ -167,7 +170,7 @@ if __name__ == "__main__":
 
     now = datetime.now()
     fmt = "%Y%m%d_%H%M%S"
-    save_dir = Path("runs", f"training_base_{now.strftime(fmt)}")
+    save_dir = Path("runs", f"training_base_{N_GAME}_{EPOCH}_{now.strftime(fmt)}")
     save_dir.mkdir(parents=True, exist_ok=True)
     logger = logging.getLogger("training_cl")
     logger.setLevel(logging.DEBUG)
