@@ -1,8 +1,6 @@
 from typing import Any, Callable, cast
-
 import torch
 import torch.nn as nn
-
 from agent.interfaces import Policy
 from agent._network import CNNActorNetwork, CNNCriticNetwork, NewCNNEncoder
 from tracking.stats import MaskedCategorical, TensorStats
