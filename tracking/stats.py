@@ -164,14 +164,8 @@ class RollingStatistics:
             try:
                 self.std = math.sqrt(self.var)
             except ValueError:
-                # Somehow var is negative but large enough to raise math domain error
-                # import pathlib
-
-                # torch.save(
-                #     {"__data": data, **vars(self)}, pathlib.Path("debug_dump.bin")
-                # )
-                print(vars(self))
-                raise
+                self.var = 0
+                self.std = 0
 
         if self._max_batches >= 0:
             self._deque.append((a_count, a_sum, a_sqsum, a_min, a_max))
