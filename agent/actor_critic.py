@@ -1,4 +1,4 @@
-from typing import Any, Callable, cast, override
+from typing import Any, Callable, cast
 
 import torch
 import torch.nn as nn
@@ -300,8 +300,6 @@ class NewCNNActorCriticPolicy(NewBaseActorCriticPolicy):
             "entropy_loss": losses[1],
             "critic_losses": losses[2:3],
         }
-
-    @override
 
     def learn(
         self,
